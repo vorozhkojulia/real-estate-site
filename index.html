@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kao & Home – Immobilien kaufen, mieten & verkaufen</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --primary:      #004B54;
+  --primary-light:#006370;
+  --primary-pale: #e0eced;
+  --accent:       #C8A96E;
+  --text-dark:    #1a1a1a;
+  --text-mid:     #4a4a4a;
+  --text-light:   #888;
+  --border:       #e0e0e0;
+  --bg-page:      #f2f2f0;
+  --bg-card:      #ffffff;
+  --shadow-sm:    0 1px 4px rgba(0,0,0,.08);
+  --shadow-md:    0 4px 16px rgba(0,0,0,.12);
+  --shadow-hover: 0 8px 28px rgba(0,75,84,.18);
+  --header-h:     62px;
+  --tr:           .22s ease;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--text-dark);background:var(--bg-page);overflow-x:hidden}
+
+/* ══════════════════════════════════════
+   HEADER — glassmorphism
+══════════════════════════════════════ */
+#hdr{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  height:var(--header-h);
+  display:flex;align-items:center;padding:0 32px;gap:32px;
+  background:linear-gradient(239.18deg,rgba(255,255,255,.18) 17.93%,rgba(255,255,255,.06) 81.51%);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.18);
+  transition:background .4s,border-color .4s,backdrop-filter .4s;
+}
+#hdr.solid{
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+.logo{display:flex;align-items:center;flex-shrink:0;cursor:pointer;text-decoration:none}
+.logo img{height:40px;width:auto;display:block;filter:brightness(0) invert(1);transition:filter .4s}
+#hdr.solid .logo img{filter:none}
+nav{display:flex;gap:2px;flex:1;justify-content:center}
+nav a{
+  text-decoration:none;font-size:.82rem;font-weight:500;
+  padding:6px 13px;letter-spacing:.01em;position:relative;
+  color:rgba(255,255,255,.85);transition:color var(--tr);
+}
+nav a::after{
+  content:'';position:absolute;bottom:0;left:13px;right:13px;
+  height:2px;background:var(--accent);transform:scaleX(0);transition:transform var(--tr);
+}
+nav a:hover{color:#fff}
+nav a:hover::after,nav a.active::after{transform:scaleX(1)}
+nav a.active{color:#fff;font-weight:600}
+#hdr.solid nav a{color:var(--text-mid)}
+#hdr.solid nav a:hover,#hdr.solid nav a.active{color:var(--primary)}
+#hdr.solid nav a::after{background:var(--primary)}
+.hdr-phone{font-size:.78rem;font-weight:500;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:6px;flex-shrink:0;transition:color .4s}
+.hdr-phone svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+#hdr.solid .hdr-phone{color:var(--text-mid)}
+
+/* ══════════════════════════════════════
+   HERO — 50vh, Ken-Burns
+══════════════════════════════════════ */
+#hero{
+  position:relative;
+  height:50vh;min-height:420px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  overflow:hidden;
+  padding-top:var(--header-h);
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:url('home page/banner_room.png') center/cover no-repeat;
+  animation:kenBurns 14s ease-out forwards;
+  will-change:transform;
+}
+@keyframes kenBurns{
+  from{transform:scale(1.14) translateY(1.5%)}
+  to  {transform:scale(1)    translateY(0)}
+}
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(160deg,rgba(0,30,38,.76) 0%,rgba(0,50,62,.52) 55%,rgba(0,20,28,.72) 100%);
+  animation:ovFade .9s ease both;
+}
+@keyframes ovFade{from{opacity:0}to{opacity:1}}
+
+/* Золота лінія внизу героя */
+.hero-line{
+  position:absolute;bottom:0;left:0;right:0;height:2px;z-index:6;
+  background:linear-gradient(to right,transparent 0%,var(--accent) 40%,var(--accent) 60%,transparent 100%);
+  transform:scaleX(0);transform-origin:center;
+  animation:lineGrow 1.4s .8s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes lineGrow{to{transform:scaleX(1)}}
+
+/* Слоган */
+.hero-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 24px;
+}
+.hero-eyebrow{
+  font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:18px;
+  opacity:0;animation:sloganUp 1s .3s cubic-bezier(.4,0,.2,1) forwards;
+}
+.hero-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(2rem,4.8vw,3.4rem);
+  line-height:1.08;color:#fff;
+}
+.hero-title .line{overflow:hidden;display:block;padding-bottom:0.12em;margin-bottom:-0.12em}
+.hero-title .line span{
+  display:block;
+  opacity:0;animation:sloganUp 1.1s cubic-bezier(.4,0,.2,1) forwards;
+}
+.hero-title .line:nth-child(1) span{animation-delay:.45s}
+.hero-title .line:nth-child(2) span{animation-delay:.68s}
+
+@keyframes sloganUp{
+  0%  {opacity:0;transform:translateY(44px);filter:blur(8px)}
+  60% {filter:blur(0)}
+  100%{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+
+/* ══════════════════════════════════════
+   CTA BAR — поза hero, перекриває його знизу
+   Активна картка підіймається вгору
+══════════════════════════════════════ */
+.hero-cta-bar{
+  position:absolute;bottom:0;left:0;right:0;z-index:10;
+  display:flex;
+  align-items:flex-end;
+  opacity:0;
+  animation:barRise .75s 1.1s ease forwards;
+}
+@keyframes barRise{
+  from{opacity:0;transform:translateY(12px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+/* Кожна картка — скло */
+.cta-tab{
+  flex:1;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:0 20px;
+  min-height:68px;
+  background:linear-gradient(239.18deg,rgba(255,255,255,.13) 17.93%,rgba(255,255,255,.04) 81.51%);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.13);
+  border-right:none;
+  text-decoration:none;cursor:pointer;
+  transition:background .28s;
+  position:relative;
+}
+.cta-tab:first-child{border-left:none}
+.cta-tab:last-child{border-right:none}
+.cta-tab:not(.active):hover{
+  background:linear-gradient(239.18deg,rgba(255,255,255,.2) 17.93%,rgba(255,255,255,.07) 81.51%);
+}
+
+/* Іконка + текст — в один рядок, іконка зліва */
+.cta-hrow{display:flex;align-items:center;gap:10px}
+.cta-texts{display:flex;flex-direction:column;gap:2px;min-width:0}
+
+/* Іконка */
+.cta-icon{
+  width:28px;height:28px;flex-shrink:0;
+  background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s;
+}
+.cta-tab.active .cta-icon{background:rgba(200,169,110,.15)}
+.cta-icon svg{width:14px;height:14px;stroke:rgba(255,255,255,.65);fill:none;stroke-width:1.8;transition:stroke .25s}
+.cta-tab.active .cta-icon svg{stroke:var(--accent)}
+
+.cta-title{
+  font-family:'DM Serif Display',serif;
+  font-size:.88rem;color:#fff;line-height:1.2;
+  transition:color .25s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cta-tab.active .cta-title{color:var(--primary)}
+.cta-desc{font-size:.68rem;color:rgba(255,255,255,.5);line-height:1.3}
+.cta-tab.active .cta-desc{color:var(--text-mid)}
+
+/* Активна картка — ВИЩе завдяки більшому вмісту + align-items:flex-end на bar */
+.cta-tab.active{
+  background:#F2F2F0;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  box-shadow:0 -8px 32px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+  border-color:transparent;
+  padding:14px 20px;
+  justify-content:flex-start;
+  align-items:stretch;
+}
+/* Акцентна лінія на вершині активної картки */
+.cta-tab.active::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--accent);
+}
+
+/* ── Пошукова форма — стиль як index.html filter-bar ── */
+.cta-search{display:none;align-items:flex-end;gap:8px;margin-top:12px;}
+.cta-tab.active .cta-search{display:flex}
+.cs-field{
+  flex:1;display:flex;flex-direction:column;gap:3px;
+}
+.cs-field label{
+  font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--text-light);
+}
+.cs-field input,.cs-field select{
+  border:1px solid var(--border);
+  padding:6px 9px;
+  font-family:'DM Sans',sans-serif;font-size:.78rem;
+  color:var(--text-dark);background:#fafafa;
+  outline:none;appearance:none;-webkit-appearance:none;
+  transition:border-color var(--tr),background var(--tr);
+  width:100%;
+}
+.cs-field input:focus,.cs-field select:focus{border-color:var(--primary);background:#fff}
+.cs-field input::placeholder{color:var(--text-light)}
+.cs-field select option{color:var(--text-dark);background:#fff}
+.cs-sel{position:relative;display:block}
+.cs-sel select{padding-right:26px;cursor:pointer}
+.cs-sel::after{content:'';position:absolute;right:9px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #aaa;pointer-events:none}
+.cs-sel:focus-within::after{border-top-color:var(--primary)}
+.cs-btn{
+  flex-shrink:0;
+  background:var(--primary);color:#fff;border:none;
+  padding:6px 14px;
+  font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.04em;
+  cursor:pointer;white-space:nowrap;
+  transition:background var(--tr);
+}
+.cs-btn:hover{background:var(--primary-light)}
+
+/* ══════════════════════════════════════
+   TRUST BAR — лічильник
+══════════════════════════════════════ */
+#trust{background:var(--primary);padding:0 32px}
+.trust-inner{display:flex;max-width:1200px;margin:0 auto}
+.trust-item{
+  flex:1;display:flex;align-items:center;gap:14px;
+  padding:22px 28px;
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.trust-item:last-child{border-right:none}
+.trust-icon{
+  width:36px;height:36px;flex-shrink:0;
+  background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+}
+.trust-icon svg{width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:1.8}
+.trust-val{
+  font-family:'DM Serif Display',serif;font-size:1.55rem;
+  color:#fff;line-height:1;display:block;
+}
+.trust-lbl{font-size:.7rem;color:rgba(255,255,255,.48);margin-top:3px}
+
+/* ══════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════ */
+.sec-label{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.sec-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.2rem);line-height:1.15;color:var(--text-dark);margin-bottom:10px}
+.sec-sub{font-size:.85rem;color:var(--text-light);line-height:1.75;max-width:440px}
+
+/* ══════════════════════════════════════
+   TOP OFFERS
+══════════════════════════════════════ */
+#offers{padding:64px 32px;max-width:1200px;margin:0 auto}
+.offers-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;gap:20px}
+.see-all{
+  font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:6px;
+  border-bottom:1.5px solid var(--primary-pale);padding-bottom:2px;
+  transition:border-color var(--tr),gap var(--tr);flex-shrink:0;
+}
+.see-all:hover{border-color:var(--primary);gap:10px}
+.see-all svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5}
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+/* Card — ідентично index.html */
+.card{
+  background:var(--bg-card);overflow:hidden;cursor:pointer;
+  border:1px solid transparent;position:relative;
+  transition:box-shadow var(--tr),transform var(--tr),border-color var(--tr);
+  text-decoration:none;color:inherit;display:block;
+}
+.card:hover{box-shadow:var(--shadow-hover);transform:translateY(-3px);border-color:var(--primary-pale)}
+.card.selected{box-shadow:var(--shadow-hover);transform:translateY(-3px);border-color:var(--primary);border-width:1.5px}
+.cards-grid.has-selected .card:not(.selected):not(:hover){transform:translateY(0);box-shadow:none;border-color:transparent}
+.ci{position:relative;height:178px;overflow:hidden;background:#e0e0e0}
+.ci img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.card:hover .ci img{transform:scale(1.05)}
+.badge{position:absolute;top:9px;left:9px;background:var(--primary);color:#fff;font-size:.59rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;z-index:2}
+.badge.premium{background:var(--accent)}
+.badge.exklusiv{background:#1a1a1a}
+.fav{position:absolute;top:9px;right:9px;width:30px;height:30px;background:rgba(255,255,255,.92);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background var(--tr),transform var(--tr);z-index:2}
+.fav:hover{background:#fff;transform:scale(1.12)}
+.fav svg{width:15px;height:15px;stroke:var(--text-mid);fill:none;stroke-width:2}
+.cb{padding:12px 14px 14px}
+.ctype{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.ct{font-size:.82rem;font-weight:600;color:var(--text-dark);line-height:1.3;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cl{font-size:.7rem;color:var(--text-light);display:flex;align-items:center;gap:4px;margin-bottom:11px}
+.cl svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.cd-line{height:1px;background:var(--border);margin-bottom:10px}
+.cmeta{display:flex;gap:14px;margin-bottom:10px}
+.cm{display:flex;align-items:center;gap:4px;font-size:.72rem;color:var(--text-mid)}
+.cm svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.cp{font-size:.88rem;font-weight:700;color:var(--primary)}
+.cp-sub{font-size:.65rem;color:var(--text-light);margin-top:1px}
+
+/* ══════════════════════════════════════
+   IN 3 SCHRITTEN
+══════════════════════════════════════ */
+#how{background:var(--primary);padding:72px 32px}
+.how-inner{max-width:1200px;margin:0 auto}
+.how-hdr{margin-bottom:44px}
+.how-hdr .sec-label{color:rgba(255,255,255,.45)}
+.how-hdr .sec-title{color:#fff}
+.how-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:48px}
+.htab{
+  padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;
+  color:rgba(255,255,255,.6);background:transparent;border:none;cursor:pointer;
+  position:relative;transition:color var(--tr);
+}
+.htab::after{content:'';position:absolute;bottom:-1px;left:24px;right:24px;height:2px;background:var(--accent);transform:scaleX(0);transition:transform var(--tr)}
+.htab.active{color:#fff}
+.htab.active::after{transform:scaleX(1)}
+.how-steps{display:none;grid-template-columns:repeat(3,1fr);position:relative}
+.how-steps.active{display:grid}
+
+
+/* ─── Крок: початковий стан (прихований) ─── */
+.hstep{
+  padding:0 36px;border-right:1px solid rgba(255,255,255,.08);
+  opacity:0;transform:translateY(36px);
+  transition:opacity .6s ease,transform .6s ease,background .25s;
+  cursor:default;
+}
+.hstep:first-child{padding-left:0}
+.hstep:last-child{border-right:none;padding-right:0}
+
+/* ─── Крок: анімований стан ─── */
+.how-steps.animated .hstep:nth-child(1){opacity:1;transform:none}
+.how-steps.animated .hstep:nth-child(2){opacity:1;transform:none;transition-delay:.18s}
+.how-steps.animated .hstep:nth-child(3){opacity:1;transform:none;transition-delay:.36s}
+
+/* ─── Hover: підйом кроку ─── */
+.how-steps.animated .hstep:hover{transform:translateY(-6px)!important;transition:transform .28s ease!important}
+.how-steps.animated .hstep:hover .hstep-num{color:rgba(200,169,110,.18)}
+.how-steps.animated .hstep:hover .hstep-icon{background:rgba(200,169,110,.22)}
+
+/* ─── Номер ─── */
+.hstep-num{
+  font-family:'DM Serif Display',serif;font-size:4rem;
+  color:rgba(255,255,255,.07);line-height:1;margin-bottom:-8px;user-select:none;
+  transition:color .35s;
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path .7s ease,color .35s;
+}
+.how-steps.animated .hstep:nth-child(1) .hstep-num{clip-path:inset(0 0% 0 0)}
+.how-steps.animated .hstep:nth-child(2) .hstep-num{clip-path:inset(0 0% 0 0);transition-delay:.18s}
+.how-steps.animated .hstep:nth-child(3) .hstep-num{clip-path:inset(0 0% 0 0);transition-delay:.36s}
+
+/* ─── Іконка: pop з bounce ─── */
+.hstep-icon{
+  width:56px;height:56px;margin-bottom:20px;
+  background:rgba(200,169,110,.18);
+  border:1px solid rgba(200,169,110,.35);
+  display:flex;align-items:center;justify-content:center;
+  transform:scale(.72);opacity:0;
+  transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .4s ease,background .28s,border-color .28s;
+}
+.hstep-icon svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.8;transition:stroke .28s}
+.how-steps.animated .hstep:nth-child(1) .hstep-icon{transform:scale(1);opacity:1;transition-delay:.3s}
+.how-steps.animated .hstep:nth-child(2) .hstep-icon{transform:scale(1);opacity:1;transition-delay:.48s}
+.how-steps.animated .hstep:nth-child(3) .hstep-icon{transform:scale(1);opacity:1;transition-delay:.66s}
+
+/* ─── Заголовок і текст ─── */
+.hstep-title{font-size:.93rem;font-weight:600;color:#fff;margin-bottom:10px}
+.hstep-text{font-size:.82rem;color:rgba(255,255,255,.72);line-height:1.85}
+
+/* ══════════════════════════════════════
+   FAQ
+══════════════════════════════════════ */
+#faq{background:#fff;padding:72px 32px}
+.faq-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:5fr 7fr;gap:72px;align-items:start}
+.faq-aside-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.59rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;margin-bottom:14px}
+.faq-aside-title{font-family:'DM Serif Display',serif;font-size:1.8rem;line-height:1.25;color:var(--text-dark);margin-bottom:14px}
+.faq-aside-text{font-size:.83rem;color:var(--text-light);line-height:1.8;margin-bottom:24px}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--primary);color:#fff;text-decoration:none;
+  padding:9px 20px;font-family:'DM Sans',sans-serif;
+  font-size:.8rem;font-weight:700;letter-spacing:.04em;border:none;cursor:pointer;
+  transition:background var(--tr),transform var(--tr),box-shadow var(--tr);
+}
+.btn-primary:hover{background:var(--primary-light);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,75,84,.3)}
+.btn-primary svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.5}
+.faq-list{display:flex;flex-direction:column}
+.faq-item{border-top:1px solid var(--border)}
+.faq-item:last-child{border-bottom:1px solid var(--border)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 0;cursor:pointer;gap:16px;user-select:none}
+.faq-qt{font-size:.9rem;font-weight:600;color:var(--text-dark);transition:color var(--tr);flex:1;line-height:1.4}
+.faq-item.open .faq-qt{color:var(--primary)}
+.faq-icon{width:28px;height:28px;flex-shrink:0;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;transition:background var(--tr),border-color var(--tr),transform var(--tr)}
+.faq-item.open .faq-icon{background:var(--primary);border-color:var(--primary);transform:rotate(45deg)}
+.faq-icon svg{width:12px;height:12px;stroke:var(--text-mid);fill:none;stroke-width:2.5;transition:stroke var(--tr)}
+.faq-item.open .faq-icon svg{stroke:#fff}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .42s cubic-bezier(.4,0,.2,1)}
+.faq-item.open .faq-body{max-height:300px}
+.faq-a{padding-bottom:20px;font-size:.84rem;color:var(--text-mid);line-height:1.82}
+
+/* ══════════════════════════════════════
+   CTA STRIP
+══════════════════════════════════════ */
+#cta{background:var(--accent);padding:56px 32px;text-align:center}
+.cta-strip-title{font-family:'DM Serif Display',serif;font-size:1.9rem;color:#fff;margin-bottom:10px}
+.cta-strip-sub{font-size:.88rem;color:rgba(255,255,255,.72);margin-bottom:28px}
+.cta-strip-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-dark{padding:9px 26px;background:var(--primary);color:#fff;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-decoration:none;transition:background var(--tr),transform var(--tr)}
+.btn-dark:hover{background:var(--primary-light);transform:translateY(-1px)}
+.btn-ghost{padding:8px 26px;background:transparent;border:1.5px solid rgba(255,255,255,.55);color:#fff;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-decoration:none;transition:background var(--tr),border-color var(--tr),transform var(--tr)}
+.btn-ghost:hover{background:rgba(255,255,255,.12);border-color:#fff;transform:translateY(-1px)}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{background:#0f1f22;padding:48px 32px 28px}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;max-width:1200px;margin:0 auto 40px}
+.ft-brand-text{font-size:.78rem;color:rgba(255,255,255,.38);line-height:1.8;margin-top:14px;max-width:220px}
+.ft-logo{height:34px;filter:brightness(0) invert(1)}
+.ft-col-lbl{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px}
+.ft-links{display:flex;flex-direction:column;gap:9px}
+.ft-links a{font-size:.8rem;color:rgba(255,255,255,.45);text-decoration:none;transition:color var(--tr)}
+.ft-links a:hover{color:#fff}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:24px;max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:rgba(255,255,255,.25);flex-wrap:wrap;gap:12px}
+.ft-bottom a{color:rgba(255,255,255,.3);text-decoration:none;transition:color var(--tr)}
+.ft-bottom a:hover{color:rgba(255,255,255,.7)}
+.ft-bottom-links{display:flex;gap:20px}
+
+/* ══════════════════════════════════════
+   REVEAL
+══════════════════════════════════════ */
+[data-r]{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+[data-r].in{opacity:1;transform:none}
+[data-rd="1"]{transition-delay:.08s}
+[data-rd="2"]{transition-delay:.16s}
+[data-rd="3"]{transition-delay:.24s}
+[data-rd="4"]{transition-delay:.32s}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1100px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:860px){
+  nav{display:none}
+  #hdr{padding:0 16px}
+  .hero-cta-bar{flex-direction:column;margin-top:0;align-items:stretch}
+  .cta-tab.active{transform:none;box-shadow:none}
+  .cta-tab.active::before{display:none}
+  .trust-inner{flex-wrap:wrap}
+  .trust-item{width:50%;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  .how-steps.active{grid-template-columns:1fr;gap:32px}
+  .hstep{border-right:none;padding:0}
+  .faq-inner{grid-template-columns:1fr;gap:36px}
+  #offers,#faq,#how,#cta{padding:48px 20px}
+}
+@media(max-width:600px){
+  .cards-grid{grid-template-columns:1fr}
+  .trust-item{width:100%}
+  .ft{grid-template-columns:1fr}
+  footer{padding:40px 20px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header id="hdr">
+  <a href="home2.html" class="logo">
+    <img src="logo real estate agency.png" alt="Kao & Home" onerror="this.style.display='none'">
+  </a>
+  <nav>
+    <a href="home2.html" class="active">Home</a>
+    <a href="index.html">Kaufen</a>
+    <a href="#">Mieten</a>
+    <a href="#">Verkaufen</a>
+    <a href="#">Bewerten</a>
+    <a href="#">Ratgeber</a>
+  </nav>
+  <div class="hdr-phone">
+    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg>
+    +49 89 123 456 78
+  </div>
+</header>
+
+<!-- ══ HERO (тільки слоган) ══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Kao &amp; Home Immobilien</p>
+    <h1 class="hero-title">
+      <span class="line"><span>Ihr Zuhause.</span></span>
+      <span class="line"><span>Ihre&nbsp;<em style="font-style:italic;font-weight:300">Entscheidung.</em></span></span>
+    </h1>
+  </div>
+
+  <!-- ══ CTA BAR ══ -->
+  <div class="hero-cta-bar">
+
+  <!-- Verkaufen -->
+  <div class="cta-tab" data-tab="sell">
+    <div class="cta-hrow">
+      <div class="cta-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="cta-texts"><div class="cta-title">Immobilie verkaufen</div></div>
+    </div>
+    <div class="cta-search">
+      <div class="cs-field">
+        <label>Stadt / PLZ</label>
+        <input type="text" id="sell-city" placeholder="z.B. München, Berlin…">
+      </div>
+      <div class="cs-field" style="max-width:140px">
+        <label>Bezirk</label>
+        <div class="cs-sel">
+          <select id="sell-bezirk">
+            <option value="">Alle</option>
+          </select>
+        </div>
+      </div>
+      <div class="cs-field" style="max-width:90px">
+        <label>Fläche m²</label>
+        <input type="text" id="sell-flaeche" placeholder="z.B. 90">
+      </div>
+      <button class="cs-btn" onclick="window.location.href='#cta'">Bewerten</button>
+    </div>
+  </div>
+
+  <!-- Kaufen — центр, активне за замовчуванням -->
+  <div class="cta-tab active" data-tab="buy">
+    <div class="cta-hrow">
+      <div class="cta-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="cta-texts"><div class="cta-title">Immobilie kaufen</div></div>
+    </div>
+    <div class="cta-search">
+      <div class="cs-field">
+        <label>Stadt / PLZ</label>
+        <input type="text" id="s-city" placeholder="z.B. München, Berlin…">
+      </div>
+      <div class="cs-field" style="max-width:150px">
+        <label>Max. Preis</label>
+        <div class="cs-sel">
+          <select id="s-price">
+            <option value="">Kein Limit</option>
+            <option value="300000">300.000 €</option>
+            <option value="500000">500.000 €</option>
+            <option value="800000">800.000 €</option>
+            <option value="1500000">1.500.000 €</option>
+            <option value="3000000">3.000.000 €</option>
+          </select>
+        </div>
+      </div>
+      <button class="cs-btn" id="search-btn">Suchen</button>
+    </div>
+  </div>
+
+  <!-- Makler kontaktieren -->
+  <div class="cta-tab" data-tab="contact">
+    <div class="cta-hrow">
+      <div class="cta-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="cta-texts"><div class="cta-title">Makler kontaktieren</div></div>
+    </div>
+    <div class="cta-search">
+      <div class="cs-field">
+        <label>Ihr Name</label>
+        <input type="text" placeholder="Vor- und Nachname">
+      </div>
+      <div class="cs-field" style="max-width:170px">
+        <label>Telefon / E-Mail</label>
+        <input type="text" placeholder="+49 oder name@mail.de">
+      </div>
+      <button class="cs-btn" onclick="window.location.href='#cta'">Anfragen</button>
+    </div>
+  </div>
+
+  </div><!-- /hero-cta-bar -->
+</section><!-- /hero -->
+
+<!-- ══ TRUST BAR ══ -->
+<div id="trust">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div>
+        <div class="trust-val" data-count="318" data-suffix="">318</div>
+        <div class="trust-lbl">Aktive Immobilien</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div>
+        <div class="trust-val" data-count="15" data-suffix="+">15+</div>
+        <div class="trust-lbl">Jahre Erfahrung</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div>
+        <div class="trust-val" data-count="4.9" data-suffix="★" data-decimal="1">4.9★</div>
+        <div class="trust-lbl">Kundenbewertung</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div>
+        <div class="trust-val" data-count="2.4" data-prefix="€" data-suffix=" Mrd." data-decimal="1">€2.4 Mrd.</div>
+        <div class="trust-lbl">Transaktionsvolumen</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOP OFFERS ══ -->
+<section>
+  <div id="offers">
+    <div class="offers-hdr">
+      <div>
+        <h2 class="sec-title">Top Angebote</h2>
+      </div>
+      <a href="index.html" class="see-all">Alle ansehen <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="cards-grid">
+
+      <a href="index.html" class="card" data-r data-rd="1">
+        <div class="ci">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=640&q=80" alt="" loading="lazy">
+          <span class="badge exklusiv">Exklusiv</span>
+          <button class="fav" onclick="event.preventDefault()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="cb">
+          <div class="ctype">Penthouse</div>
+          <div class="ct">Modernes Penthouse mit Dachterrasse</div>
+          <div class="cl"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>20354 Hamburg · Harvestehude</div>
+          <div class="cd-line"></div>
+          <div class="cmeta">
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>4 Zi.</div>
+            <div class="cm"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>165 m²</div>
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M20 9v11a2 2 0 01-2 2H6a2 2 0 01-2-2V9"/><path d="M2 10.5l10-7.5 10 7.5"/></svg>2 Bäder</div>
+          </div>
+          <div class="cp">1.290.000 €</div>
+          <div class="cp-sub">Kaufpreis inkl. Stellplatz</div>
+        </div>
+      </a>
+
+      <a href="index.html" class="card" data-r data-rd="2">
+        <div class="ci">
+          <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=640&q=80" alt="" loading="lazy">
+          <span class="badge premium">Premium</span>
+          <button class="fav" onclick="event.preventDefault()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="cb">
+          <div class="ctype">Villa</div>
+          <div class="ct">Großzügige Villa mit Swimmingpool</div>
+          <div class="cl"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>60325 Frankfurt · Westend</div>
+          <div class="cd-line"></div>
+          <div class="cmeta">
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>8 Zi.</div>
+            <div class="cm"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>420 m²</div>
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M20 9v11a2 2 0 01-2 2H6a2 2 0 01-2-2V9"/><path d="M2 10.5l10-7.5 10 7.5"/></svg>4 Bäder</div>
+          </div>
+          <div class="cp">3.800.000 €</div>
+          <div class="cp-sub">Kaufpreis zzgl. Nebenkosten</div>
+        </div>
+      </a>
+
+      <a href="index.html" class="card" data-r data-rd="3">
+        <div class="ci">
+          <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=640&q=80" alt="" loading="lazy">
+          <span class="badge">Neu</span>
+          <button class="fav" onclick="event.preventDefault()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="cb">
+          <div class="ctype">Wohnung</div>
+          <div class="ct">Stilvolle 3-Zimmer-Wohnung mit Balkon</div>
+          <div class="cl"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>10115 Berlin · Mitte</div>
+          <div class="cd-line"></div>
+          <div class="cmeta">
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>3 Zi.</div>
+            <div class="cm"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>89 m²</div>
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M20 9v11a2 2 0 01-2 2H6a2 2 0 01-2-2V9"/><path d="M2 10.5l10-7.5 10 7.5"/></svg>1 Bad</div>
+          </div>
+          <div class="cp">485.000 €</div>
+          <div class="cp-sub">Kaufpreis inkl. Einbauküche</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ IN 3 SCHRITTEN ══ -->
+<section id="how">
+  <div class="how-inner">
+    <div class="how-hdr" data-r>
+      <h2 class="sec-title">In 3 Schritten zum Ziel</h2>
+    </div>
+    <div class="how-tabs">
+      <button class="htab active" data-how="buy">Ich möchte kaufen</button>
+      <button class="htab" data-how="sell">Ich möchte verkaufen</button>
+    </div>
+    <div class="how-steps active" id="how-buy">
+      <div class="hstep"><div class="hstep-num">01</div><div class="hstep-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="hstep-title">Wunschimmobilie definieren</div><div class="hstep-text">Teilen Sie uns Ihre Vorstellungen mit – Lage, Größe, Budget. Wir suchen gezielt in unserem Portfolio und Netzwerk.</div></div>
+      <div class="hstep"><div class="hstep-num">02</div><div class="hstep-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="hstep-title">Besichtigung &amp; Beratung</div><div class="hstep-text">Wir begleiten Sie bei jedem Termin persönlich und beantworten alle Fragen zu Immobilie, Lage und Finanzierung.</div></div>
+      <div class="hstep"><div class="hstep-num">03</div><div class="hstep-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="hstep-title">Kaufvertrag &amp; Übergabe</div><div class="hstep-text">Wir koordinieren Notar und alle Formalitäten – Sie erhalten die Schlüssel zu Ihrem neuen Zuhause.</div></div>
+    </div>
+    <div class="how-steps" id="how-sell">
+      <div class="hstep"><div class="hstep-num">01</div><div class="hstep-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="hstep-title">Kostenlose Wertermittlung</div><div class="hstep-text">Unser Experte analysiert Ihre Immobilie und erstellt eine fundierte Marktwertanalyse – kostenlos und unverbindlich.</div></div>
+      <div class="hstep"><div class="hstep-num">02</div><div class="hstep-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="hstep-title">Professionelle Vermarktung</div><div class="hstep-text">Profifotografie, 3D-Grundrisse und gezielte Schaltung auf allen relevanten Portalen für maximale Reichweite.</div></div>
+      <div class="hstep"><div class="hstep-num">03</div><div class="hstep-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="hstep-title">Bestpreisverkauf &amp; Abschluss</div><div class="hstep-text">Wir führen die Verhandlungen in Ihrem Interesse und begleiten Sie bis zur Vertragsunterzeichnung beim Notar.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="faq-aside" data-r>
+      <h2 class="faq-aside-title">Häufig gestellte Fragen</h2>
+      <p class="faq-aside-text">Klare Antworten rund um Kauf, Verkauf und Bewertung von Immobilien.</p>
+      <a href="#" class="btn-primary">Beratung anfragen <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="faq-list" data-r data-rd="2">
+      <div class="faq-item"><div class="faq-q"><span class="faq-qt">Wie lange dauert der Verkauf einer Immobilie?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-body"><p class="faq-a">Im Durchschnitt dauert ein professionell begleiteter Verkauf 3 bis 6 Monate. Bei gut positionierten Objekten erzielen wir oft bereits nach wenigen Wochen einen Abschluss.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span class="faq-qt">Was kostet eine Immobilienbewertung?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-body"><p class="faq-a">Unsere Immobilienbewertung ist vollständig kostenlos und unverbindlich. Wir analysieren Marktdaten, Vergleichsobjekte und die individuellen Merkmale Ihrer Immobilie.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span class="faq-qt">Welche Unterlagen benötige ich für den Verkauf?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-body"><p class="faq-a">Grundbuchauszug, Energieausweis, Flurkarte, Baupläne und Grundrisse – bei Eigentumswohnungen zusätzlich Teilungserklärung und Protokolle der Eigentümerversammlung.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span class="faq-qt">Wie hoch ist die Maklerprovision?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-body"><p class="faq-a">Seit der Maklerrechtsreform 2020 teilen sich Käufer und Verkäufer die Provision. Die Gesamtprovision liegt regional zwischen 5,95 % und 7,14 % inkl. MwSt.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span class="faq-qt">Kann ich kaufen, wenn ich kein Eigenkapital habe?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div><div class="faq-body"><p class="faq-a">Banken empfehlen mindestens 20 % Eigenkapital. Vollfinanzierungen sind möglich, jedoch mit höheren Zinsen. Unsere Berater prüfen alle Optionen – von KfW-Förderung bis zur Bankfinanzierung.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section id="cta">
+  <h2 class="cta-strip-title">Bereit für den nächsten Schritt?</h2>
+  <p class="cta-strip-sub">Vereinbaren Sie jetzt ein kostenloses Erstgespräch mit einem unserer Experten.</p>
+  <div class="cta-strip-btns">
+    <a href="index.html" class="btn-dark">Immobilien entdecken</a>
+    <a href="#faq" class="btn-ghost">Kostenlose Beratung</a>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="ft">
+    <div>
+      <img src="logo real estate agency.png" alt="Kao & Home" class="ft-logo" onerror="this.style.display='none'">
+      <p class="ft-brand-text">Ihr zuverlässiger Immobilienpartner in Deutschland – transparent, persönlich, erfahren.</p>
+    </div>
+    <div><div class="ft-col-lbl">Kaufen &amp; Mieten</div><div class="ft-links"><a href="index.html">Alle Angebote</a><a href="#">Wohnungen</a><a href="#">Häuser</a><a href="#">Villen</a></div></div>
+    <div><div class="ft-col-lbl">Services</div><div class="ft-links"><a href="#">Verkaufen</a><a href="#">Bewertung</a><a href="#">Finanzierung</a><a href="#">Ratgeber</a></div></div>
+    <div><div class="ft-col-lbl">Kontakt</div><div class="ft-links"><a href="#">+49 89 123 456 78</a><a href="#">info@kaohome.de</a><a href="#">Impressum</a><a href="#">Datenschutz</a></div></div>
+  </div>
+  <div class="ft-bottom">
+    <span>© 2026 Kao &amp; Home Immobilien GmbH · Alle Rechte vorbehalten</span>
+    <div class="ft-bottom-links"><a href="#">AGB</a><a href="#">Datenschutz</a><a href="#">Impressum</a></div>
+  </div>
+</footer>
+
+<script>
+// ── Header: glass → solid
+const hdr = document.getElementById('hdr');
+function updateHdr(){ hdr.classList.toggle('solid', window.scrollY > 50) }
+window.addEventListener('scroll', updateHdr, {passive:true});
+updateHdr();
+
+// ── CTA bar tab switching
+document.querySelectorAll('.cta-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if(tab.classList.contains('active')) return;
+    document.querySelectorAll('.cta-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// ── Bezirk dropdown by city
+const BEZIRKE = {
+  'münchen':    ['Schwabing','Maxvorstadt','Bogenhausen','Haidhausen','Neuhausen','Sendling','Glockenbachviertel','Pasing','Laim'],
+  'berlin':     ['Mitte','Prenzlauer Berg','Charlottenburg','Kreuzberg','Friedrichshain','Schöneberg','Neukölln','Steglitz','Pankow'],
+  'hamburg':    ['Altona','Eimsbüttel','Harvestehude','Blankenese','Winterhude','Barmbek','Wandsbek','Rahlstedt','Ottensen'],
+  'frankfurt':  ['Sachsenhausen','Westend','Bornheim','Nordend','Bockenheim','Gallus','Niederrad','Griesheim'],
+  'köln':       ['Innenstadt','Ehrenfeld','Nippes','Lindenthal','Rodenkirchen','Porz','Chorweiler','Deutz'],
+  'düsseldorf': ['Altstadt','Oberkassel','Pempelfort','Derendorf','Friedrichstadt','Flingern','Eller','Benrath'],
+  'stuttgart':  ['Mitte','West','Nord','Ost','Degerloch','Vaihingen','Feuerbach','Zuffenhausen'],
+  'leipzig':    ['Zentrum','Gohlis','Connewitz','Plagwitz','Reudnitz','Schleußig','Lindenau','Mockau'],
+  'dresden':    ['Innere Altstadt','Neustadt','Loschwitz','Blasewitz','Striesen','Pieschen','Cotta'],
+};
+const sellCity = document.getElementById('sell-city');
+const sellBezirk = document.getElementById('sell-bezirk');
+if(sellCity && sellBezirk){
+  sellCity.addEventListener('input', () => {
+    const key = sellCity.value.trim().toLowerCase().replace(/ü/g,'ü').replace(/ö/g,'ö');
+    const match = Object.keys(BEZIRKE).find(k => k.startsWith(key) || key.startsWith(k));
+    const list = match && key.length >= 3 ? BEZIRKE[match] : [];
+    sellBezirk.innerHTML = '<option value="">Alle</option>' +
+      list.map(b => `<option value="${b}">${b}</option>`).join('');
+  });
+}
+
+// ── Search → index.html
+document.getElementById('search-btn').addEventListener('click', () => {
+  const city  = document.getElementById('s-city').value.trim();
+  const price = document.getElementById('s-price').value;
+  const p = new URLSearchParams();
+  if(city)  p.set('city', city);
+  if(price) p.set('pmax', price);
+  window.location.href = 'index.html' + (p.toString() ? '?' + p : '');
+});
+document.getElementById('s-city').addEventListener('keydown', e => {
+  if(e.key === 'Enter') document.getElementById('search-btn').click();
+});
+
+// ── How-it-works tabs + animation
+function triggerHowAnim(stepsEl){
+  stepsEl.classList.remove('animated');
+  requestAnimationFrame(() => requestAnimationFrame(() => stepsEl.classList.add('animated')));
+}
+
+const howObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting && e.target.classList.contains('active')){
+      triggerHowAnim(e.target);
+      howObs.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.15});
+
+document.querySelectorAll('.how-steps').forEach(s => howObs.observe(s));
+
+document.querySelectorAll('.htab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.htab').forEach(x => x.classList.remove('active'));
+    const prev = document.querySelector('.how-steps.active');
+    if(prev){ prev.classList.remove('active','animated'); }
+    t.classList.add('active');
+    const next = document.getElementById('how-' + t.dataset.how);
+    next.classList.add('active');
+    setTimeout(() => triggerHowAnim(next), 50);
+  });
+});
+
+// ── FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if(!open) item.classList.add('open');
+  });
+});
+
+// ── Card selection (click keeps one elevated, others rest)
+const cardsGrid = document.querySelector('.cards-grid');
+if(cardsGrid){
+  cardsGrid.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', e => {
+      const alreadySelected = card.classList.contains('selected');
+      cardsGrid.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+      cardsGrid.classList.remove('has-selected');
+      if(!alreadySelected){
+        card.classList.add('selected');
+        cardsGrid.classList.add('has-selected');
+      }
+    });
+  });
+}
+
+// ── Reveal on scroll
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); revObs.unobserve(e.target) } });
+}, {threshold:0, rootMargin:'0px 0px -40px 0px'});
+const revEls = document.querySelectorAll('[data-r]');
+revEls.forEach(el => revObs.observe(el));
+// Fallback: reveal anything still hidden after 1.5s (e.g. sandboxed iframe)
+setTimeout(() => revEls.forEach(el => el.classList.add('in')), 1500);
+
+// ── Counter animation — ease-out cubic
+function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3) }
+
+function runCounter(el){
+  const target   = parseFloat(el.dataset.count);
+  const prefix   = el.dataset.prefix  || '';
+  const suffix   = el.dataset.suffix  || '';
+  const decimals = parseInt(el.dataset.decimal || '0');
+  const duration = 2000;
+  const startTS  = performance.now();
+
+  function tick(now){
+    const progress = Math.min((now - startTS) / duration, 1);
+    const value    = easeOutCubic(progress) * target;
+    el.textContent = prefix + value.toFixed(decimals) + suffix;
+    if(progress < 1) requestAnimationFrame(tick);
+    else el.textContent = prefix + target.toFixed(decimals) + suffix;
+  }
+  requestAnimationFrame(tick);
+}
+
+// Запускаємо лічильники коли trust bar входить у viewport
+const trustEl = document.getElementById('trust');
+let countersStarted = false;
+
+function startCounters(){
+  if(countersStarted) return;
+  countersStarted = true;
+  trustEl.querySelectorAll('.trust-val[data-count]').forEach(el => runCounter(el));
+}
+
+const trustObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ startCounters(); trustObs.unobserve(e.target); } });
+}, {threshold: 0});
+
+if(trustEl){
+  trustObs.observe(trustEl);
+  // Запускаємо одразу — trust bar видно при завантаженні
+  setTimeout(startCounters, 250);
+}
+</script>
+</body>
+</html>
