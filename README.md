@@ -3,7 +3,8 @@
 A front-end prototype for a real estate website, built as part of my **AI-assisted PM & UX testing series**.
 
 ## Pages
-- `index.html` — Property listing page
+- `index.html` — Home page
+- `listing.html` - Property listing page
 - `property.html` — Detailed property info page
 
 ## How it was made
